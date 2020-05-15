@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
-#dburi = 'postgres://nlqdivywrpomql:de868e8988b7872516ae01823ae3858468d1e400b2f0e47be17aa3dea613bc37@ec2-54-81-37-115.compute-1.amazonaws.com:5432/dca309g7qh6vf0?sslmode=require'
+dburi = 'postgres://clikrrdctqcuis:049f4ccfd236f228dfd29ca261ad4967476f92acdecdecd87ed7ebe964f378d9@ec2-35-169-254-43.compute-1.amazonaws.com:5432/de21dpoptggcfe?sslmode=require'
 app.config['SQLALCHEMY_DATABASE_URI']=dburi
 
 db = SQLAlchemy(app)
@@ -23,11 +23,12 @@ def check_if_cat_exists(cat):
 class Book(db.Model):
     __tablename__="books"
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(300), nullable=False)
-    author = db.Column(db.String(300), nullable=False)
+    title = db.Column(db.String(400), nullable=False)
+    author = db.Column(db.String(400), nullable=False)
     year = db.Column(db.Integer)
     dewey = db.Column(db.String(20))
     goodreads_url = db.Column(db.String(512))
+    series = db.Column(db.String(300))
     categories = db.relationship("Category", secondary=association_table, lazy='subquery',
                         backref=db.backref('books', lazy=True))
 
@@ -62,6 +63,12 @@ def add_book():
     categories = Category.query.all()
 
     return render_template("add.html", len = len(categories), categories = categories)
+
+@app.route("/search")
+def search():
+
+    return render_template("search.html")
+
 
 @app.route("/category")
 def category():
