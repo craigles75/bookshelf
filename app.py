@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
-dburi = 'postgres://clikrrdctqcuis:049f4ccfd236f228dfd29ca261ad4967476f92acdecdecd87ed7ebe964f378d9@ec2-35-169-254-43.compute-1.amazonaws.com:5432/de21dpoptggcfe?sslmode=require'
+#dburi = 'postgres://clikrrdctqcuis:049f4ccfd236f228dfd29ca261ad4967476f92acdecdecd87ed7ebe964f378d9@ec2-35-169-254-43.compute-1.amazonaws.com:5432/de21dpoptggcfe?sslmode=require'
 app.config['SQLALCHEMY_DATABASE_URI']=dburi
 
 db = SQLAlchemy(app)
@@ -29,15 +29,18 @@ class Book(db.Model):
     dewey = db.Column(db.String(20))
     goodreads_url = db.Column(db.String(512))
     series = db.Column(db.String(300))
+    status = db.Column(db.String(300))
     categories = db.relationship("Category", secondary=association_table, lazy='subquery',
                         backref=db.backref('books', lazy=True))
 
-    def __init__(self, title, author, year, dewey, goodreads_url):
+    def __init__(self, title, author, year, dewey, goodreads_url, series, status):
         self.title = title
         self.author = author
         self.year = year
         self.dewey = dewey
         self.goodreads_url = goodreads_url
+        self.series = series
+        self.status = status
 
 class Category(db.Model):
     __tablename__="categories"
@@ -101,8 +104,10 @@ def success():
         dewey = request.form["dewey"]
         goodreads_url = request.form["goodreads_url"]
         categories = request.form.getlist("categories")
+        series = ""
+        status = ""
 
-        data = Book(title, author, int(year), dewey, goodreads_url)
+        data = Book(title, author, int(year), dewey, goodreads_url, series, "In Bookshelf")
         for cat in categories:
             data.categories.append(Category.query.filter_by(id=cat).first())
         
