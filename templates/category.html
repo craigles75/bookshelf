@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <h1>Book Categories</h1>
+
+    <p>This is the place to see what categories are currently available and add any that might be missing</p>
+    
+
+    <container>
+    <div class="error">
+        {{error_text | safe}}
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6 themed-grid-col">
+            <h3>Current Categories Available</h3>
+            {%for i in range(0, len)%} 
+                <li>{{categories[i].name}}</li> 
+            {%endfor%}
+        </div>
+        <div class="col-md-6 themed-grid-col">
+            <h3>Add your categories here</h3>
+            <form action="{{url_for('category_success')}}" method="POST">
+                <input title="Category Name" placeholder="Enter a new category" type="text" name="category_name" required> <br>
+                <button type="submit"> Submit </button>
+            </form>
+        </div>
+
+    </div>
+    </container>
+
+{% endblock %}
