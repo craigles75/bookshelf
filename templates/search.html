@@ -1,20 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="home">
-    <h1>Welcome to the Penfold Family Bookshelf</h1>
+    <h1>Search</h1>
 </div>
 
-    <h3>We found x books that match your search</h3>
+    <h3>We found {{count}} books that match your search</h3>
 
-    {%for i in range(0, len)%} 
+    {% if books %}
+      {% for book in books %}
+        <li>{{ book.title }}, by {{ book.author }}</li>
+      {% endfor %}
+    {% endif %}
 
-      <li>{{books[i].title}} by {{books[i].author}}
-          (
-          {%for cat in books[i].categories%}
-            {{cat.name}}
-          {%endfor%}
-          )
-      </li> 
-    {%endfor%}  
+
 
 {% endblock %}

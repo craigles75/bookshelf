@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Table, Column, Integer, ForeignKey
+from sqlalchemy import Table, Column, Integer, ForeignKey, or_
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.exc import NoResultFound
+import urllib.parse
 
 app = Flask(__name__)
 dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
@@ -76,16 +77,21 @@ def book(id):
         books = Book.query.order_by(Book.id.desc()).limit(10).all()
         return render_template("index.html", len = len(books), books = books)
 
+@app.route("/search", methods=['POST','GET'])
+def search():
+    if request.args and "q" in request.args:
+        args = request.args
+        query = urllib.parse.unquote_plus(args["q"])
+        books = Book.query.filter(or_(Book.title.ilike("%" + query + "%"), Book.author.ilike("%" + query +"%"))).all()
+        return render_template("search.html", count = len(books), books = books)
+    else:
+        return render_template("search.html", count=0)
+
 @app.route("/add_book")
 def add_book():
     categories = Category.query.order_by(Category.name).all()
 
     return render_template("add.html", len = len(categories), categories = categories)
-
-@app.route("/search")
-def search():
-
-    return render_template("search.html")
 
 
 @app.route("/category")
