@@ -13,9 +13,11 @@
     <div class="row mb-3">
         <div class="col-md-6 themed-grid-col">
             <h3>Current Categories Available</h3>
+            <div class="list">
             {%for i in range(0, len)%} 
                 <li>{{categories[i].name}}</li> 
             {%endfor%}
+            </div>
         </div>
         <div class="col-md-6 themed-grid-col">
             <h3>Add your categories here</h3>

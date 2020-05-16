@@ -77,3 +77,8 @@ html, body {
 .container li {
     text-align: left;
 }
+
+.container .list {
+    height: 400px;
+    overflow: scroll;
+}
