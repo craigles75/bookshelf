@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm.exc import NoResultFound
 
 app = Flask(__name__)
 dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
@@ -46,6 +47,8 @@ class Category(db.Model):
         self.name = name
 
 @app.route("/")
+@app.route("/home")
+@app.route("/index")
 def index():
     books = Book.query.order_by(Book.id.desc()).limit(10).all()
     return render_template("index.html", len = len(books), books = books)
@@ -63,6 +66,15 @@ def books():
     count = Book.query.count()
 
     return render_template("books.html", count = count, books = books, categories = categories, category = category)
+
+@app.route("/book/<int:id>")
+def book(id):
+    try:
+        book = Book.query.filter(Book.id == id).first()
+        return render_template("book.html", book = book)
+    except NoResultFound:
+        books = Book.query.order_by(Book.id.desc()).limit(10).all()
+        return render_template("index.html", len = len(books), books = books)
 
 @app.route("/add_book")
 def add_book():

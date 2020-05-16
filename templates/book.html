@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  <h1>{{book.title}}</h1>
+  <h3>{{book.author}}</h3>
+
+<container>
+  <div class="error">
+    {{error_text | safe}}
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-6 themed-grid-col">
+
+    </div>
+    <div class="col-md-6 themed-grid-col">
+      
+    </div>
+  </div>
+</container>
+{% endblock %}
