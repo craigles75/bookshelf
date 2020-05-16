@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
-dburi = 'postgres://clikrrdctqcuis:049f4ccfd236f228dfd29ca261ad4967476f92acdecdecd87ed7ebe964f378d9@ec2-35-169-254-43.compute-1.amazonaws.com:5432/de21dpoptggcfe?sslmode=require'
+#dburi = 'postgres://clikrrdctqcuis:049f4ccfd236f228dfd29ca261ad4967476f92acdecdecd87ed7ebe964f378d9@ec2-35-169-254-43.compute-1.amazonaws.com:5432/de21dpoptggcfe?sslmode=require'
 app.config['SQLALCHEMY_DATABASE_URI']=dburi
 
 db = SQLAlchemy(app)
@@ -58,7 +58,7 @@ def books():
 
 @app.route("/add_book")
 def add_book():
-    categories = Category.query.all()
+    categories = Category.query.order_by(Category.name).all()
 
     return render_template("add.html", len = len(categories), categories = categories)
 
