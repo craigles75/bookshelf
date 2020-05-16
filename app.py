@@ -50,11 +50,19 @@ def index():
     books = Book.query.order_by(Book.id.desc()).limit(10).all()
     return render_template("index.html", len = len(books), books = books)
 
-@app.route("/books")
+@app.route("/books", methods=['POST','GET'])
 def books():
-    books = Book.query.all()
+    category = None
+    if request.method == "POST" and request.form["category"] != "_all_":
+        category = request.form["category"]
+        books = Book.query.join(Category, Book.categories).filter(Category.name == category).all()
+    else:
+        books = Book.query.limit(50).all()
 
-    return render_template("books.html", len = len(books), books = books)
+    categories = Category.query.order_by(Category.name).all()
+    count = Book.query.count()
+
+    return render_template("books.html", count = count, books = books, categories = categories, category = category)
 
 @app.route("/add_book")
 def add_book():
