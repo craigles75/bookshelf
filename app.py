@@ -15,11 +15,6 @@ association_table = db.Table('association',
     db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
 )
 
-def check_if_cat_exists(cat):
-    existing_cat = Category.query.filter_by(id=cat).first()
-    print (existing_cat)
-    return None
-
 class Book(db.Model):
     __tablename__="books"
     id = db.Column(db.Integer, primary_key=True)
@@ -104,8 +99,8 @@ def success():
         dewey = request.form["dewey"]
         goodreads_url = request.form["goodreads_url"]
         categories = request.form.getlist("categories")
-        series = ""
-        status = ""
+        series = request.form["series"]
+        status = request.form["status"]
 
         data = Book(title, author, int(year), dewey, goodreads_url, series, "In Bookshelf")
         for cat in categories:
