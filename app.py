@@ -53,7 +53,7 @@ class Category(db.Model):
 @app.route("/index")
 def index():
     books = Book.query.order_by(Book.id.desc()).limit(10).all()
-    return render_template("index.html", len = len(books), books = books)
+    return render_template("index.html", books = books)
 
 @app.route("/books", methods=['POST','GET'])
 def books():

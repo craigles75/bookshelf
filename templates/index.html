@@ -6,11 +6,11 @@
 
     <h3>Here's a list of our most recently added books</h3>
 
-    {%for i in range(0, len)%} 
+    {%for book in books%} 
 
-      <li>{{books[i].title}} by {{books[i].author}}
+      <li><a href="{{url_for('book', id=book.id)}}">{{book.title}}</a> by {{book.author}}
           (
-          {%for cat in books[i].categories%}
+          {%for cat in book.categories%}
             {{cat.name}}
           {%endfor%}
           )

@@ -11,7 +11,7 @@
   <div class="row mb-3">
     <div class="col-md-6 themed-grid-col">
       {%for book in books%} 
-        <li><i>{{book.title}}</i> by {{book.author}}<br>
+        <li><a href="{{url_for('book', id=book.id)}}"><i>{{book.title}}</i></a> by {{book.author}}<br>
           {% if book.categories %}
             (
               {%for cat in book.categories%}
