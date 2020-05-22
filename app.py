@@ -8,6 +8,7 @@ import urllib.parse
 app = Flask(__name__)
 dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
 dburi = 'postgres://clikrrdctqcuis:049f4ccfd236f228dfd29ca261ad4967476f92acdecdecd87ed7ebe964f378d9@ec2-35-169-254-43.compute-1.amazonaws.com:5432/de21dpoptggcfe?sslmode=require'
+dburi = 'postgres://pfgsvnayonnmsl:b0f29222429ecdaa6b42fb7686f542a6343c99f07abffcd5ce06cfdcafba94b5@ec2-34-192-173-173.compute-1.amazonaws.com:5432/dba7rr406lu21c?sslmode=require'
 app.config['SQLALCHEMY_DATABASE_URI']=dburi
 
 db = SQLAlchemy(app)
@@ -76,6 +77,41 @@ def book(id):
     except NoResultFound:
         books = Book.query.order_by(Book.id.desc()).limit(10).all()
         return render_template("index.html", len = len(books), books = books)
+
+
+@app.route("/update/<int:id>")
+def update(id):
+    book = Book.query.filter(Book.id == id).first()
+    categories = Category.query.order_by(Category.name).all()
+
+    return render_template("update.html", book = book, categories = categories)
+
+@app.route("/update_success", methods=["POST"])
+def update_success():
+    if request.method == "POST":
+        id = request.form["id"]
+        title = request.form["title"]
+        author = request.form["author"]
+        year = request.form["year"]
+        
+        if year == "":
+            year = 0
+
+        dewey = request.form["dewey"]
+        goodreads_url = request.form["goodreads_url"]
+        categories = request.form.getlist("categories")
+        series = request.form["series"]
+        status = request.form["status"]
+
+        #CP TODO Need to update this
+        data = Book(title, author, int(year), dewey, goodreads_url, series, "In Bookshelf")
+        for cat in categories:
+            data.categories.append(Category.query.filter_by(id=cat).first())
+        
+        db.session.add(data)
+        db.session.commit()
+
+        return render_template("update_success.html")
 
 @app.route("/search", methods=['POST','GET'])
 def search():
