@@ -17,6 +17,9 @@
         {% if book.series %}
           <strong>Series:</strong> {{book.series}}<br>
         {%endif%}
+        {% if book.categories %}
+          <strong>Categories:</strong> {%for cat in book.categories%} {{cat.name}},{%endfor%}<br>
+        {%endif%}
         {% if goodreads_info.average_rating %}
           <strong>Goodreads Rating:</strong> {{goodreads_info.average_rating}}<br>
         {%endif%}
