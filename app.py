@@ -132,14 +132,14 @@ def search():
 def add_book():
     categories = Category.query.order_by(Category.name).all()
 
-    return render_template("add.html", len = len(categories), categories = categories)
+    return render_template("add.html", categories = categories)
 
 
 @app.route("/category")
 def category():
     categories = Category.query.order_by(Category.name).all()
 
-    return render_template("category.html", len = len(categories), categories = categories)
+    return render_template("category.html", categories = categories)
 
 @app.route("/category_success", methods=['POST'])
 def category_success():
@@ -151,7 +151,7 @@ def category_success():
         db.session.commit()
 
         categories = Category.query.all()
-        return render_template("category.html", len = len(categories), categories = categories)
+        return render_template("category.html", categories = categories)
 
 @app.route("/success", methods=['POST'])
 def success():

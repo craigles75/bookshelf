@@ -20,8 +20,8 @@
                 <input title="Status" placeholder="Enter the Status" type="text" name="status"> <br>
                 <fieldset>
                     <legend>Select 1 or more Categories</legend>
-                    {%for i in range(0, len)%} 
-                        <input type="checkbox" name="categories" value="{{categories[i].id}}" id="{{categories[i].name}}"><label for="{{categories[i].name}}">{{categories[i].name}}</label> <br> 
+                    {%for cat in categories%} 
+                        <input type="checkbox" name="categories" value="{{cat.id}}" id="{{cat.name}}"><label for="{{cat.name}}">{{cat.name}}</label> <br> 
                     {%endfor%}
                 </fieldset>
                 <button type="submit"> Submit </button>

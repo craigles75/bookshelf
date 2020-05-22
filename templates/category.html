@@ -14,8 +14,8 @@
         <div class="col-md-6 themed-grid-col">
             <h3>Current Categories Available</h3>
             <div class="list">
-            {%for i in range(0, len)%} 
-                <li>{{categories[i].name}}</li> 
+            {%for cat in categories%} 
+                <li>{{cat.name}}</li> 
             {%endfor%}
             </div>
         </div>
