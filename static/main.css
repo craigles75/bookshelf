@@ -82,3 +82,7 @@ html, body {
     height: 400px;
     overflow: scroll;
 }
+
+.container a {
+    color: #FFFFFF
+}
