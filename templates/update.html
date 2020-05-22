@@ -13,7 +13,7 @@
   </div>
   <div class="row mb-3">
     <div class="col-md-6 themed-grid-col">
-      <form action="{{url_for('update_success')}}" method="POST"></form>
+      <form action="{{url_for('update_success')}}" method="POST">
       <input type="hidden" value="{{book.id}}" name="id">
       <input title="Title" placeholder="Enter the book Title" value="{{book.title}}" type="text" name="title" required> <br>
       <input title="Author" placeholder="Enter the Author" value="{{book.author}}" type="text" name="author" required> <br>
