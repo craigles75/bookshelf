@@ -20,7 +20,6 @@
     <input title="Goodreads URL" placeholder="Enter the URL from Goodreads" value="{{book.goodreads_url}}" type="text" name="goodreads_url"> <br>
     <input title="Series" placeholder="Enter the Series" value="{{book.series}}" type="text" name="series"> <br>
     <input title="Status" placeholder="Enter the Status" value="{{book.status}}" type="text" name="status"> <br>
-    {{book.categories[0].id}}
     <fieldset>
       <legend>Select 1 or more Categories</legend>
         {%for cat in categories %} 

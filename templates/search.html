@@ -8,7 +8,7 @@
 
     {% if books %}
       {% for book in books %}
-      <a href="{{url_for('book', id=book.id)}}"><li>{{ book.title }}</a>, by {{ book.author }}</li>
+      <a href="{{url_for('book', id=book.id)}}"><li>{{ book.title }}</a>, by {{ book.author }} - <a href="{{url_for('update', id=book.id)}}">Update Book Details</a></a></li>
       {% endfor %}
     {% endif %}
 
