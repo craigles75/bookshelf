@@ -10,13 +10,37 @@
   </div>
   <div class="row mb-3">
     <div class="col-md-6 themed-grid-col">
-      {% if goodreads_info.description %}
-        <p>{{goodreads_info.description}}</p>
-      {%endif%}
+      <p style="text-align: left;">
+        {% if book.year %}
+          <strong>Published:</strong> {{book.year}}<br>
+        {%endif%}
+        {% if book.series %}
+          <strong>Series:</strong> {{book.series}}<br>
+        {%endif%}
+        {% if goodreads_info.average_rating %}
+          <strong>Goodreads Rating:</strong> {{goodreads_info.average_rating}}<br>
+        {%endif%}
+        {% if book.goodreads_url %}
+          <strong>Goodreads URL:</strong> <a href="{{book.goodreads_url}}" target="_new">{{book.goodreads_url}}</a><br>
+        {%endif%}
+        {% if book.dewey %}
+          <strong>Dewey Decimal:</strong> {{book.dewey}}<br>
+        {%endif%}
+        {% if book.status %}
+          <strong>Book Location:</strong> {{book.status}}<br>
+        {%endif%}
+      </p>
     </div>
     <div class="col-md-6 themed-grid-col">
       {% if goodreads_info %}
         <img src="{{goodreads_info.image_url}}">
+      {%endif%}
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="themed-grid-col">
+      {% if goodreads_info.description %}
+        <p>{{goodreads_info.description | safe}}</p>
       {%endif%}
     </div>
   </div>
