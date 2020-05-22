@@ -59,6 +59,10 @@ html, body {
     transition: all 0.2s ease-in-out;
 }
 
+.container input[type=checkbox] {
+    width: 20px;    
+}
+
 .container button {
     width: 70px;
     height: 30px;
