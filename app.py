@@ -4,6 +4,8 @@ from sqlalchemy import Table, Column, Integer, ForeignKey, or_
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.exc import NoResultFound
 import urllib.parse
+import re
+from goodreads import client
 
 app = Flask(__name__)
 dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
@@ -73,7 +75,15 @@ def books():
 def book(id):
     try:
         book = Book.query.filter(Book.id == id).first()
-        return render_template("book.html", book = book)
+        goodreads_info = None
+
+        if book.goodreads_url:
+            #extract goodreads ID from url - eg https://www.goodreads.com/book/show/6452796-drive
+            goodreads_id = re.findall(r'\d+', book.goodreads_url)[0]
+            gc = client.GoodreadsClient("tgD8K4Fqox5oiga7k55jQ", "g0CZAQSn4Bopy3oFyrtbjlwU9DqA5CtLZpJFI4e08")
+            goodreads_info = gc.book(goodreads_id)
+            
+        return render_template("book.html", book = book, goodreads_info = goodreads_info)
     except NoResultFound:
         books = Book.query.order_by(Book.id.desc()).limit(10).all()
         return render_template("index.html", len = len(books), books = books)

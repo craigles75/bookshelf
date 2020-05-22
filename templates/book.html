@@ -10,11 +10,20 @@
   </div>
   <div class="row mb-3">
     <div class="col-md-6 themed-grid-col">
-
+      {% if goodreads_info %}
+        <p>{{goodreads_info.description}}</p>
+      {%endif%}
     </div>
     <div class="col-md-6 themed-grid-col">
-      
+      {% if goodreads_info %}
+        <img src="{{goodreads_info.image_url}}">
+      {%endif%}
     </div>
+  </div>
+  <div class="footer">
+    {% if goodreads_info %}
+      Some info provided by <a href="{{book.goodreads_url}}"><img src="https://s.gr-assets.com/assets/icons/goodreads_icon_32x32-6c9373254f526f7fdf2980162991a2b3.png" alt"Goodreads"></a>
+    {%endif%}
   </div>
 </container>
 {% endblock %}
