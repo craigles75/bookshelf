@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from sqlalchemy import Table, Column, Integer, ForeignKey, or_
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.exc import NoResultFound
@@ -49,6 +50,10 @@ class Category(db.Model):
     
     def __init__(self, name):
         self.name = name
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 @app.route("/")
 @app.route("/home")
