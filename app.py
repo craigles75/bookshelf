@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 from sqlalchemy import Table, Column, Integer, ForeignKey, or_
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.exc import NoResultFound
+from flask_login import LoginManager
 import urllib.parse
 import re
 from goodreads import client
