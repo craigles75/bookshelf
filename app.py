@@ -54,15 +54,17 @@ class Music(db.Model):
     title = db.Column(db.String(400), nullable=False)
     artist = db.Column(db.String(400), nullable=False)
     year = db.Column(db.Integer)
+    format = db.Column(db.String(50))
     spotify_id = db.Column(db.String(512))
     status = db.Column(db.String(300))
     categories = db.relationship("Category", secondary=music_association_table, lazy='subquery',
                         backref=db.backref('music', lazy=True))
 
-    def __init__(self, title, artist, year, spotify_id, status):
+    def __init__(self, title, artist, year, format, spotify_id, status):
         self.title = title
         self.artist = artist
         self.year = year
+        self.format = format
         self.spotify_id = spotify_id
         self.status = status
 
