@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, ForeignKey, or_
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.exc import NoResultFound
-from flask_login import LoginManager
+#from flask_login import LoginManager
 import urllib.parse
 import re
 from goodreads import client
@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URI']=dburi
 
 db = SQLAlchemy(app)
 
-association_table = db.Table('association',  
+association_table = db.Table('association',
     db.Column('book_id', db.Integer, db.ForeignKey('books.id'), primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
 )
@@ -47,13 +47,13 @@ class Category(db.Model):
     __tablename__="categories"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300), unique=True)
-    
+
     def __init__(self, name):
         self.name = name
 
 
-login_manager = LoginManager()
-login_manager.init_app(app)
+#login_manager = LoginManager()
+#login_manager.init_app(app)
 
 @app.route("/")
 @app.route("/home")
@@ -87,7 +87,7 @@ def book(id):
             goodreads_id = re.findall(r'\d+', book.goodreads_url)[0]
             gc = client.GoodreadsClient("tgD8K4Fqox5oiga7k55jQ", "g0CZAQSn4Bopy3oFyrtbjlwU9DqA5CtLZpJFI4e08")
             goodreads_info = gc.book(goodreads_id)
-            
+
         return render_template("book.html", book = book, goodreads_info = goodreads_info)
     except NoResultFound:
         books = Book.query.order_by(Book.id.desc()).limit(10).all()
@@ -109,7 +109,7 @@ def update(id):
 def update_success():
     if request.method == "POST":
         book = Book.query.filter(Book.id == request.form["id"]).first()
-    
+
         book.title = request.form["title"]
         book.author = request.form["author"]
 
@@ -174,7 +174,7 @@ def success():
         title = request.form["title"]
         author = request.form["author"]
         year = request.form["year"]
-        
+
         if year == "":
             year = 0
 
@@ -187,7 +187,7 @@ def success():
         data = Book(title, author, int(year), dewey, goodreads_url, series, "In Bookshelf")
         for cat in categories:
             data.categories.append(Category.query.filter_by(id=cat).first())
-        
+
         db.session.add(data)
         db.session.commit()
 
