@@ -21,6 +21,11 @@ association_table = db.Table('association',
     db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
 )
 
+music_association_table = db.Table('music_association',
+    db.Column('music_id', db.Integer, db.ForeignKey('music.id'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+)
+
 class Book(db.Model):
     __tablename__="books"
     id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +46,24 @@ class Book(db.Model):
         self.dewey = dewey
         self.goodreads_url = goodreads_url
         self.series = series
+        self.status = status
+
+class Music(db.Model):
+    __tablename__="music"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(400), nullable=False)
+    artist = db.Column(db.String(400), nullable=False)
+    year = db.Column(db.Integer)
+    spotify_id = db.Column(db.String(512))
+    status = db.Column(db.String(300))
+    categories = db.relationship("Category", secondary=music_association_table, lazy='subquery',
+                        backref=db.backref('music', lazy=True))
+
+    def __init__(self, title, artist, year, spotify_id, status):
+        self.title = title
+        self.artist = artist
+        self.year = year
+        self.spotify_id = spotify_id
         self.status = status
 
 class Category(db.Model):
