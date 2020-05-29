@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  <h1>Albums</h1>
+  <h3>Our list of albums are here - {{count}} albums in the collection</h3>
+
+<container>
+  <div class="error">
+    {{error_text | safe}}
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-6 themed-grid-col">
+      {%for album in music%} 
+        <li><a href="{{url_for('album', id=album.id)}}"><i>{{album.title}}</i></a> by {{album.artist}}<br>
+          {% if music.genres %}
+            (
+              {%for genre in music.genres%}
+                {{genre.name}}
+              {%endfor%}
+            )
+          {% endif %}
+        </li> 
+      {%endfor%}
+    </div>
+    <div class="col-md-6 themed-grid-col">
+      <Strong>Filter by Genre</strong>
+      <form action="{{url_for('music')}}" method="POST">
+          <select id="genre" name="genre" onchange="this.form.submit()">
+            <option value="_all_" selected>All Genres</option>
+            {%for i in genres%}
+              {% if i.name == genre %}
+                <option value="{{i.name}}" selected>{{i.name}}</option>
+              {% else %}
+                <option value="{{i.name}}">{{i.name}}</option>
+              {% endif %}
+            {%endfor%}
+          </select><br>
+      </form>
+    </div>
+  </div>
+</container>
+{% endblock %}

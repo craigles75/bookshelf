@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  <h1>{{music.title}}</h1>
+  <h3>{{music.artist}}</h3>
+
+<container>
+  <div class="error">
+    {{error_text | safe}}
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-6 themed-grid-col">
+      <p style="text-align: left;">
+        {% if music.year %}
+          <strong>Released:</strong> {{music.year}}<br>
+        {%endif%}
+        {% if music.genres %}
+          <strong>Genres:</strong> {%for genre in music.genres%} {{genre.name}},{%endfor%}<br>
+        {%endif%}
+        {% if music.format %}
+          <strong>Format:</strong> {{music.format}}<br>
+        {%endif%}
+        {% if music.status %}
+          <strong>Album Location:</strong> {{music.status}}<br>
+        {%endif%}
+      </p>
+    </div>
+    <div class="col-md-6 themed-grid-col">
+      Img goes here
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="themed-grid-col">
+      <p>Album description goes here</p>
+    </div>
+  </div>
+  <div class="footer">
+    
+      Some info provided by
+    
+  </div>
+</container>
+{% endblock %}

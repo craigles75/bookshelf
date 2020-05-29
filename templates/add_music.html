@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="home">
+    <h1>Add Music Here</h1>
+    <p>Enter the details of Album you wish to add to the collection</p>
+</div>
+
+            
+
+<div class="error">
+    {{error_text | safe}}
+</div>
+<div class="row mb-3">
+    <div class="col-md-6 themed-grid-col">
+        <form action="{{url_for('music_success')}}" method="POST">
+            <input title="Title" placeholder="Enter the album Title" type="text" name="title" required> <br>
+            <input title="Artist" placeholder="Enter the Artist" type="text" name="artist" required> <br>
+            <input title="Year" placeholder="Enter the year published" type="number" name="year" min="1000" max="2060"> <br>
+            <label for="format">Format</label>
+            <select id="format" name="format">
+                <option value="Vinyl">Vinyl</option>
+                <option value="CD">CD</option>
+                <option value="Cassette">Cassette</option>
+            </select> <br>
+            <input title="Spotify ID" placeholder="Enter the ID from Spotify" type="text" name="spotify_id"> <br>
+            <input title="Status" placeholder="Enter the Status" type="text" name="status"> <br>
+            <button type="submit"> Submit </button>
+    </div>
+    <div class="col-md-6 themed-grid-col">
+          <div class="list">    
+            <fieldset>
+                    <legend>Select 1 or more Genres</legend>
+                    {%for genre in genres%} 
+                        <input type="checkbox" name="genres" value="{{genre.id}}" id="{{genre.name}}"><label for="{{genre.name}}">{{genre.name}}</label> <br> 
+                    {%endfor%}
+                </fieldset>
+            </div>
+        </form>
+        </div>
+      </div>
+
+{% endblock %}

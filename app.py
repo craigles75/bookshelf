@@ -23,7 +23,7 @@ association_table = db.Table('association',
 
 music_association_table = db.Table('music_association',
     db.Column('music_id', db.Integer, db.ForeignKey('music.id'), primary_key=True),
-    db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+    db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'), primary_key=True)
 )
 
 class Book(db.Model):
@@ -48,6 +48,14 @@ class Book(db.Model):
         self.series = series
         self.status = status
 
+class Category(db.Model):
+    __tablename__="categories"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(300), unique=True)
+
+    def __init__(self, name):
+        self.name = name
+
 class Music(db.Model):
     __tablename__="music"
     id = db.Column(db.Integer, primary_key=True)
@@ -57,7 +65,7 @@ class Music(db.Model):
     format = db.Column(db.String(50))
     spotify_id = db.Column(db.String(512))
     status = db.Column(db.String(300))
-    categories = db.relationship("Category", secondary=music_association_table, lazy='subquery',
+    genres = db.relationship("Genre", secondary=music_association_table, lazy='subquery',
                         backref=db.backref('music', lazy=True))
 
     def __init__(self, title, artist, year, format, spotify_id, status):
@@ -68,14 +76,13 @@ class Music(db.Model):
         self.spotify_id = spotify_id
         self.status = status
 
-class Category(db.Model):
-    __tablename__="categories"
+class Genre(db.Model):
+    __tablename__="genres"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300), unique=True)
 
     def __init__(self, name):
         self.name = name
-
 
 #login_manager = LoginManager()
 #login_manager.init_app(app)
@@ -174,6 +181,12 @@ def add_book():
 
     return render_template("add.html", categories = categories)
 
+@app.route("/add_music")
+def add_music():
+    genres = Genre.query.order_by(Genre.name).all()
+
+    return render_template("add_music.html", genres = genres)
+
 
 @app.route("/category")
 def category():
@@ -192,6 +205,25 @@ def category_success():
 
         categories = Category.query.all()
         return render_template("category.html", categories = categories)
+
+@app.route("/genres")
+def genres():
+    genres = Genre.query.order_by(Genre.name).all()
+
+    return render_template("genres.html", genres = genres)
+
+@app.route("/genre_success", methods=['POST'])
+def genre_success():
+    if request.method == "POST":
+        genre_name = request.form["genre_name"]
+
+        genre = Genre(genre_name)
+        db.session.add(genre)
+        db.session.commit()
+
+        genres = Genre.query.all()
+        return render_template("genres.html", genres = genres)
+
 
 @app.route("/success", methods=['POST'])
 def success():
@@ -219,6 +251,54 @@ def success():
         return render_template("success.html")
 
 
+@app.route("/music_success", methods=['POST'])
+def music_success():
+    if request.method == "POST":
+        title = request.form["title"]
+        artist = request.form["artist"]
+        year = request.form["year"]
+
+        if year == "":
+            year = 0
+
+        format = request.form["format"]
+        spotify_id = request.form["spotify_id"]
+        genres = request.form.getlist("genres")
+        status = request.form["status"]
+
+        data = Music(title, artist, int(year), format, spotify_id, status)
+        for genre in genres:
+            data.genres.append(Genre.query.filter_by(id=genre).first())
+
+        db.session.add(data)
+        db.session.commit()
+    
+        return render_template("success.html")
+
+@app.route("/music", methods=['POST','GET'])
+def music():
+    genre = None
+    if request.method == "POST" and request.form["genre"] != "_all_":
+        genre = request.form["genre"]
+        music = Music.query.join(Genre, Music.genres).filter(Genre.name == genre).all()
+    else:
+        music = Music.query.limit(50).all()
+
+    genres = Genre.query.order_by(Genre.name).all()
+    count = Music.query.count()
+
+    return render_template("music.html", count = count, music = music, genres = genres, genre = genre)
+
+
+@app.route("/album/<int:id>")
+def album(id):
+    try:
+        music = Music.query.filter(Music.id == id).first()
+
+        return render_template("album.html", music = music)
+    except NoResultFound:
+        books = Book.query.order_by(Book.id.desc()).limit(10).all()
+        return render_template("index.html", len = len(books), books = books)
 
 if __name__ == '__main__':
     app.debug = True

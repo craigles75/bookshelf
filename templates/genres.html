@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <h1>Music Genres</h1>
+
+    <p>This is the place to see what music genres are currently available and add any that might be missing</p>
+    
+
+    <container>
+    <div class="error">
+        {{error_text | safe}}
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6 themed-grid-col">
+            <h3>Current Genres Available</h3>
+            <div class="list">
+            {%for genre in genres%} 
+                <li>{{genre.name}}</li> 
+            {%endfor%}
+            </div>
+        </div>
+        <div class="col-md-6 themed-grid-col">
+            <h3>Add your new genre here</h3>
+            <form action="{{url_for('genre_success')}}" method="POST">
+                <input title="Genre" placeholder="Enter a new music Genre" type="text" name="genre_name" required> <br>
+                <button type="submit"> Submit </button>
+            </form>
+        </div>
+
+    </div>
+    </container>
+
+{% endblock %}
