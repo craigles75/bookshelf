@@ -44,7 +44,7 @@
         <ul style="text-align: left;">
 
         {% for track in album_info["tracks"]["items"] %}
-          <p>{{track['track_number']}} - {{track['name']}}</p>
+          {{track['track_number']}} - {{track['name']}}<br>
         {%endfor%}
         </ul>
       {%endif%}

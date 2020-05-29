@@ -306,8 +306,6 @@ def album(id):
         if music.spotify_id:
             spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
             album_info = spotify.album(music.spotify_id)
-            for i, t in enumerate(album_info['tracks']['items']):
-                print(' ', i, t['name'])
 
         return render_template("album.html", music = music, album_info = album_info)
     except NoResultFound:
