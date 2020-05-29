@@ -20,23 +20,39 @@
         {% if music.format %}
           <strong>Format:</strong> {{music.format}}<br>
         {%endif%}
+        {% if album_info.label %}
+          <strong>Label:</strong> {{album_info.label}}<br>
+        {%endif%}
+        {% if album_info.popularity %}
+          <strong>Spotify Popularity:</strong> {{album_info.popularity}}%<br>
+        {%endif%}
         {% if music.status %}
           <strong>Album Location:</strong> {{music.status}}<br>
         {%endif%}
       </p>
     </div>
     <div class="col-md-6 themed-grid-col">
-      Img goes here
+      {% if album_info %}
+        <img src="{{album_info.images[0].url}}" height="200">
+      {%endif%}
     </div>
   </div>
   <div class="row mb-3">
     <div class="themed-grid-col">
-      <p>Album description goes here</p>
+      {% if album_info %}
+        <p><strong>{{ music.title }}</strong> - Track List</p>
+        <ul style="text-align: left;">
+
+        {% for track in album_info["tracks"]["items"] %}
+          <p>{{track['track_number']}} - {{track['name']}}</p>
+        {%endfor%}
+        </ul>
+      {%endif%}
     </div>
   </div>
   <div class="footer">
     
-      Some info provided by
+
     
   </div>
 </container>

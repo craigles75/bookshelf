@@ -8,6 +8,8 @@ import urllib.parse
 import re
 import os
 from goodreads import client
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 app = Flask(__name__)
 
@@ -299,8 +301,15 @@ def music():
 def album(id):
     try:
         music = Music.query.filter(Music.id == id).first()
+        album_info = None
 
-        return render_template("album.html", music = music)
+        if music.spotify_id:
+            spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+            album_info = spotify.album(music.spotify_id)
+            for i, t in enumerate(album_info['tracks']['items']):
+                print(' ', i, t['name'])
+
+        return render_template("album.html", music = music, album_info = album_info)
     except NoResultFound:
         books = Book.query.order_by(Book.id.desc()).limit(10).all()
         return render_template("index.html", len = len(books), books = books)
