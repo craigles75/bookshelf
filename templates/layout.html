@@ -34,12 +34,15 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('genres') }}">Genres</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('add_book') }}">Add a Book</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add
+                  </a>
+                  <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{{ url_for('add_book') }}">Add a Book</a>
+                    <a class="dropdown-item" href="{{ url_for('add_music') }}">Add an Album</a>
+                  </div>   
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('add_music') }}">Add an Album</a>
-              </li>
               </ul>
               <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url_for('search') }}"">
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="q">
