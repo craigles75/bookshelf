@@ -6,12 +6,17 @@ from sqlalchemy.orm.exc import NoResultFound
 #from flask_login import LoginManager
 import urllib.parse
 import re
+import os
 from goodreads import client
 
 app = Flask(__name__)
-dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
-#dburi = 'postgres://clikrrdctqcuis:049f4ccfd236f228dfd29ca261ad4967476f92acdecdecd87ed7ebe964f378d9@ec2-35-169-254-43.compute-1.amazonaws.com:5432/de21dpoptggcfe?sslmode=require'
-dburi = 'postgres://pfgsvnayonnmsl:b0f29222429ecdaa6b42fb7686f542a6343c99f07abffcd5ce06cfdcafba94b5@ec2-34-192-173-173.compute-1.amazonaws.com:5432/dba7rr406lu21c?sslmode=require'
+
+is_prod = os.environ.get('IS_HEROKU', None)
+if is_prod:
+    dburi = os.environ.get('DATABASE_URL') + '?sslmode=require'
+else:
+    dburi = 'postgresql://postgres:postgres@localhost/bookshelf'
+
 app.config['SQLALCHEMY_DATABASE_URI']=dburi
 
 db = SQLAlchemy(app)
@@ -117,7 +122,7 @@ def book(id):
         if book.goodreads_url:
             #extract goodreads ID from url - eg https://www.goodreads.com/book/show/6452796-drive
             goodreads_id = re.findall(r'\d+', book.goodreads_url)[0]
-            gc = client.GoodreadsClient("tgD8K4Fqox5oiga7k55jQ", "g0CZAQSn4Bopy3oFyrtbjlwU9DqA5CtLZpJFI4e08")
+            gc = client.GoodreadsClient(os.environ.get("GOODREADS_KEY"), os.environ.get("GOODREADS_SECRET"))
             goodreads_info = gc.book(goodreads_id)
 
         return render_template("book.html", book = book, goodreads_info = goodreads_info)
