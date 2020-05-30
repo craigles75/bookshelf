@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  <div class="home">
+    <h1>Update <i>{{album.title}}</i> by {{album.artist}} Here</h1>
+    <p>Enter the details of a album you wish to update in the collection</p>
+</div>
+
+            
+
+  <div class="error">
+    {{error_text | safe}}
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-6 themed-grid-col">
+      <form action="{{url_for('update_album_success')}}" method="POST">
+      <input type="hidden" value="{{album.id}}" name="id">
+      <input title="Title" placeholder="Enter the Album Title" value="{{album.title}}" type="text" name="title" required> <br>
+      <input title="Artist" placeholder="Enter the Artist" value="{{album.artist}}" type="text" name="artist" required> <br>
+      <input title="Year" placeholder="Enter the year published" value="{{album.year}}" type="number" name="year" min="1000" max="2060"> <br>
+      <select id="format" name="format">
+        {%if album.format == "Vinyl" %}
+          <option value="Vinyl" selected>Vinyl</option>
+        {%else%}
+          <option value="Vinyl">Vinyl</option>
+        {%endif%}
+        {%if album.format == "CD" %}
+          <option value="CD" selected>CD</option>
+        {%else%}
+          <option value="CD">CD</option>
+        {%endif%}
+        {%if album.format == "Cassette" %}
+          <option value="Cassette" selected>Cassette</option>
+        {%else%}
+          <option value="Cassette">Cassette</option>
+        {%endif%}
+      </select> <br>
+      <input title="Spotify ID" placeholder="Enter the ID from Spotify" value="{{album.spotify_id}}" type="text" name="spotify_id"> <br>
+      <input title="Status" placeholder="Enter the Status" value="{{album.status}}" type="text" name="status"> <br>
+      <button type="submit"> Submit </button>
+    </div>
+    <div class="col-md-6 themed-grid-col">
+      <div class="list">
+      <fieldset>
+        <legend>Select 1 or more Genres</legend>
+          {%for genre in genres %} 
+            {%if genre.name in current_genres %}
+              <input type="checkbox" name="genres" value="{{genre.id}}" id="{{genre.name}}" checked><label for="{{genre.name}}">{{genre.name}}</label> <br>
+            {%else%}
+              <input type="checkbox" name="genres" value="{{genre.id}}" id="{{genre.name}}"><label for="{{genre.name}}">{{genre.name}}</label> <br>
+            {%endif%}
+        {%endfor%}
+      </fieldset>
+    </div>
+    </form>
+    </div>
+  </div>
+
+{% endblock %}

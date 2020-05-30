@@ -312,6 +312,45 @@ def album(id):
         books = Book.query.order_by(Book.id.desc()).limit(10).all()
         return render_template("index.html", len = len(books), books = books)
 
+
+@app.route("/update_album/<int:id>")
+def update_album(id):
+    album = Music.query.filter(Music.id == id).first()
+    current_genres = [genre.name for genre in album.genres]
+    genres = Genre.query.order_by(Genre.name).all()
+    #dodgy hack
+    if album.year == 0:
+        album.year = ""
+
+    return render_template("update_album.html", album = album, genres = genres, current_genres = current_genres)
+
+@app.route("/update_album_success", methods=["POST"])
+def update_album_success():
+    if request.method == "POST":
+        album = Music.query.filter(Music.id == request.form["id"]).first()
+
+        album.title = request.form["title"]
+        album.artist = request.form["artist"]
+
+        year = request.form["year"]
+        #dodgy hack
+        if year == "":
+            year = 0
+        album.year = year
+
+        album.format = request.form["format"]
+        album.spotify_id = request.form["spotify_id"]
+        album.status = request.form["status"]
+
+        #clear current categories and add new/changed ones
+        genres = request.form.getlist("genres")
+        album.genres = []
+        for genre in genres:
+            album.genres.append(Genre.query.filter_by(id=genre).first())
+
+        db.session.commit()
+        return render_template("update_success.html")
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
