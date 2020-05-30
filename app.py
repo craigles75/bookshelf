@@ -178,9 +178,10 @@ def search():
         args = request.args
         query = urllib.parse.unquote_plus(args["q"])
         books = Book.query.filter(or_(Book.title.ilike("%" + query + "%"), Book.author.ilike("%" + query +"%"))).all()
-        return render_template("search.html", count = len(books), books = books)
+        albums = Music.query.filter(or_(Music.title.ilike("%" + query + "%"), Music.artist.ilike("%" + query +"%"))).all()
+        return render_template("search.html", bookcount = len(books), musiccount = len(albums), books = books, albums = albums)
     else:
-        return render_template("search.html", count=0)
+        return render_template("search.html", bookcount=0, musiccount=0)
 
 @app.route("/add_book")
 def add_book():

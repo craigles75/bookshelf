@@ -4,13 +4,25 @@
     <h1>Search</h1>
 </div>
 
-    <h3>We found {{count}} books that match your search</h3>
+    <h3>We found {{bookcount}} books and {{musiccount}} albums that match your search</h3>
 
+    <div>
     {% if books %}
+      <p><h4>Books</h4></p>
       {% for book in books %}
       <a href="{{url_for('book', id=book.id)}}"><li>{{ book.title }}</a>, by {{ book.author }} - <a href="{{url_for('update', id=book.id)}}">Update Book Details</a></a></li>
       {% endfor %}
     {% endif %}
+    </div>
+
+    <div>
+    {% if albums %}
+      <p><h4>Albums</h4></p>
+      {% for album in albums %}
+      <a href="{{url_for('album', id=album.id)}}"><li>{{ album.title }}</a>, by {{ album.artist }} on {{ album.format }} - <a href="{{url_for('update_album', id=album.id)}}">Update Album Details</a></a></li>
+      {% endfor %}
+    {% endif %}
+    </div>
 
 
 
