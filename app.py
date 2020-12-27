@@ -121,11 +121,13 @@ def book(id):
         book = Book.query.filter(Book.id == id).first()
         goodreads_info = None
 
-        if book.goodreads_url:
-            #extract goodreads ID from url - eg https://www.goodreads.com/book/show/6452796-drive
-            goodreads_id = re.findall(r'\d+', book.goodreads_url)[0]
-            gc = client.GoodreadsClient(os.environ.get("GOODREADS_KEY"), os.environ.get("GOODREADS_SECRET"))
-            goodreads_info = gc.book(goodreads_id)
+# TODO: Goodreads API no longer active - need to swap out for openlibrary.org
+#
+#        if book.goodreads_url:
+#            #extract goodreads ID from url - eg https://www.goodreads.com/book/show/6452796-drive
+#            goodreads_id = re.findall(r'\d+', book.goodreads_url)[0]
+#            gc = client.GoodreadsClient(os.environ.get("GOODREADS_KEY"), os.environ.get("GOODREADS_SECRET"))
+#            goodreads_info = gc.book(goodreads_id)
 
         return render_template("book.html", book = book, goodreads_info = goodreads_info)
     except NoResultFound:
